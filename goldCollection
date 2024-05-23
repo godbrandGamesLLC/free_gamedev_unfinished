@@ -1,0 +1,104 @@
+//ultimate beg of script_CollectionGold script
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+//New usings
+using UnityEngine.UI;
+using TMPro;
+using System;
+
+public class script_CollectionGold : MonoBehaviour
+{//beg of public class script_CollectionGold
+
+    //Health
+    public float health_Coin = 50f;
+
+    //Particles
+    ParticleSystem explosion_GoldCoin;
+    public int delay_Explosion = 0;
+
+    //Sound
+    AudioSource sound_Gold;
+
+    //Text inits
+    public TMP_Text m_MyText;
+
+
+    // Start is called before the first frame update
+    void Start()
+    {//Beginning of Start======
+
+
+        sound_Gold = GetComponent<AudioSource>();
+
+        explosion_GoldCoin = GetComponent<ParticleSystem>();
+
+        //Text sets your text to say this message
+        m_MyText.text = "Gold:0 to start";
+
+
+    }//End of Start
+
+
+    public void TakeDamage(float amount)
+    {//Beginning of TakeDamage function
+
+        health_Coin -= amount;//subtracting the health from the enemy(ies) that were just struck
+
+        if (health_Coin <= 0f)
+        {
+            Die();
+        }
+
+    }//End of TakeDamage function==========================
+
+    void Die()
+    {//Beginning of Die function==========
+
+        //Playing the enemy explosion Sound
+        sound_Gold.Play();
+
+        explosion_GoldCoin.Play();
+
+        //Destroying the gold coin
+        Destroy(gameObject, delay_Explosion);//original  --add in destroy deathParticles after we get some of this ish working 
+                                             //double check the particles aren’t destroyed with the coin since theyre on it
+
+    }//End of Die function
+
+    void OnTriggerEnter(Collider col)
+    {//Beginning of OnTriggerEnter(Collider col)
+
+        if (col.tag == "player_Avatar")
+        {//beginning of if (col.tag == "player_Avatar")
+
+            Debug.Log("Hit by player_Avatar");
+
+            health_Coin = health_Coin - 60;
+
+            if (health_Coin <= 0f)
+            {
+                count_gold = count_gold + 1;
+
+                Die();
+                // m_MyText.text = "Gold:" + Mathf.Round((float)count_gold); For when its on the rotating gold coin directly
+                m_MyText.text = "Gold:" + count_gold;
+            }
+
+        }//end of if (col.tag == "player_Avatar")
+
+    }//end of OnTriggerEnter(Collider col)
+
+    public static double count_gold
+    {
+        get;
+        private set;
+    }//End of public static double count_gold
+
+
+
+}//end of public class script_CollectionGold
+
+//ultimate end of script_CollectionGold script
